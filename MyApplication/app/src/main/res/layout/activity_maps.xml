@@ -1,3 +1,8 @@
+<RelativeLayout
+    android:id="@+id/rlParent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
 
 
@@ -8,5 +13,29 @@
     android:id="@+id/map"
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="470dp"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentStart="true"
     tools:context="com.chai.myapplication.MapsActivity" />
+
+    <EditText
+        android:id="@+id/edtLocation"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/btnSearch"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="24dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="" />
+
+    <Button
+        android:id="@+id/btnSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="32dp"
+        android:onClick="onClick"
+        android:text="Search" />
+</RelativeLayout>

@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +14,10 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.location.LocationListener;
@@ -30,6 +36,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
+import java.util.List;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private GoogleMap mMap;
@@ -38,6 +47,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Location lastLocation;
     private Marker currentLocationMarker;
     public static final int REQUEST_LOCATION_CODE=99;
+    private EditText edtLocation;
+    private Button btnSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +59,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        btnSearch=(Button)findViewById(R.id.btnSearch);
 
+
+    }
+
+    public void onClick(View v)
+    {
+        if(v.getId()==R.id.btnSearch)
+        {
+            edtLocation=(EditText)findViewById(R.id.edtLocation);
+            String location1= edtLocation.getText().toString();
+            List<Address> addressList = null;
+            if(!TextUtils.isEmpty(location1))
+            {
+                Geocoder geocoder= new Geocoder(this);
+                MarkerOptions markerOptions=new MarkerOptions();
+                try {
+                    addressList=geocoder.getFromLocationName(location1,5);
+                }catch (IOException io)
+                {
+                 io.printStackTrace();
+                }
+                for(int i=0;i<addressList.size();i++)
+                {
+                   Address address=addressList.get(i);
+                   LatLng latLng =new LatLng(address.getLatitude(),address.getLongitude());
+                    markerOptions.position(latLng);
+                    markerOptions.title("your Search Result");
+                    mMap.addMarker(markerOptions);
+                    mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                }
+
+            }
+
+        }
     }
 
 
